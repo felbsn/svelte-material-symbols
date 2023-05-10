@@ -5,6 +5,7 @@
     import { scale, slide } from "svelte/transition";
     import Fuse from "fuse.js";
     import { onMount, tick } from "svelte";
+    import { preferences } from "./store.js";
 
     let search = "";
 
@@ -17,8 +18,8 @@
     let sliceSize = 100;
     let sliceStart = 0;
 
-    let titles = false;
-    let dark = false;
+    let titles = $preferences.titles;
+    let dark = $preferences.dark;
 
     let copied = "";
     let copiedOnlyName = false;
@@ -45,7 +46,6 @@
         const adaptedSearchTerm = s
             .split(" ")
             .reduce((previousValue, currentValue) => previousValue + ` '${currentValue}`, "");
-        console.log("searching " + adaptedSearchTerm);
 
         let results = s ? fuse.search(adaptedSearchTerm).map((d) => d.item) : all;
         return results;
@@ -108,7 +108,7 @@
     let container;
 
     async function fillView() {
-        while (container.scrollTop >= container.scrollHeight - container.offsetHeight) {
+        while (sliceSize < results.length && container.scrollTop >= container.scrollHeight - container.offsetHeight) {
             sliceSize += 100;
             pops.push([container.scrollTop, sliceSize - 100]);
             await tick();
@@ -199,12 +199,22 @@
 
         <!-- <span style="display:flex;gap:inherit;margin-left:auto;"> -->
         <label class="toggle">
-            <input type="checkbox" bind:checked={dark} style="display:none" />
+            <input
+                type="checkbox"
+                bind:checked={dark}
+                on:change={() => ($preferences.dark = dark)}
+                style="display:none" />
+
             <Symbol name={dark ? "light_mode" : "dark_mode"} fill />
         </label>
 
         <label class="toggle">
-            <input type="checkbox" bind:checked={titles} style="display:none" />
+            <input
+                type="checkbox"
+                bind:checked={titles}
+                on:change={() => ($preferences.titles = titles)}
+                style="display:none" />
+
             <Symbol name={titles ? "subtitles" : "subtitles_off"} />
         </label>
 
@@ -350,7 +360,7 @@
     .init {
         max-width: 0;
         overflow: hidden;
-        transition: all 200ms;
+        transition: all 400ms;
         white-space: nowrap;
         font-size: 14px;
 
@@ -358,13 +368,13 @@
         border-radius: 3px;
         padding: 0px;
 
-        transition-delay: 1000ms;
+        transition-delay: 2000ms;
     }
     .toggle:hover .init {
         max-width: 300px;
         overflow: hidden;
         padding: 4px;
-        transition-delay: 00ms;
+        transition-delay: 200ms;
     }
 
     code.init {
