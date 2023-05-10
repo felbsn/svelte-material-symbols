@@ -21,6 +21,7 @@
 
     let copied = "";
     let copiedOnlyName = false;
+    let copiedInstall = false;
 
     /**
      * @type {{name:keyof codepoints, code:string,title:string}[]}
@@ -72,14 +73,29 @@
         startClearCopy();
     }
 
-    let clearTimer = 0;
+    function copyInstall() {
+        copiedInstall = true;
+        navigator.clipboard.writeText(`npm i svelte-material-symbols`);
 
+        startInstallClearCopy();
+    }
+
+    let clearTimer = 0;
     function startClearCopy() {
         if (clearTimer) clearInterval(clearTimer);
         clearTimer = setTimeout(() => {
             copied = "";
             clearTimer = 0;
         }, 5_000);
+    }
+
+    let clearInstallTimer = 0;
+    function startInstallClearCopy() {
+        if (clearInstallTimer) clearInterval(clearInstallTimer);
+        clearInstallTimer = setTimeout(() => {
+            copiedInstall = false;
+            clearInstallTimer = 0;
+        }, 3_000);
     }
 
     let pops = [];
@@ -147,23 +163,39 @@
 
         <span style="display: flex;flex-grow: 1;" />
 
-        <span style="display:flex;gap:inherit;margin-left:auto;">
-            <label class="toggle">
-                <input type="checkbox" bind:checked={dark} style="display:none" />
-                <Symbol name={dark ? "light_mode" : "dark_mode"} fill color={dark ? "white" : "black"} />
-            </label>
-
-            <label class="toggle">
-                <input type="checkbox" bind:checked={titles} style="display:none" />
-                <Symbol name={titles ? "subtitles" : "subtitles_off"} />
-            </label>
-
-            <a class="toggle" href="https://github.com/felbsn/svelte-material-symbols">
-                <Symbol name="code" />
-                github
-                <input type="checkbox" style="display:none" />
+        <label class="toggle">
+            <a href="###" style="display: flex;">
+                <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+                    ><rect x="227.6" y="213.1" width="28.4" height="57.1" /><path
+                        d="M0,156V327.4H142.2V356H256V327.4H512V156ZM142.2,298.9H113.8V213.2H85.3v85.7H28.4V184.6H142.2Zm142.2,0H227.5v28.6H170.6V184.6H284.4Zm199.2,0H455.2V213.2H426.8v85.7H398.4V213.2H370v85.7H313.1V184.6H483.8V298.9Z" /></svg>
             </a>
-        </span>
+            <code class="init"
+                >npm i svelte-material-symbols <button
+                    class="copy-button"
+                    on:click={() => copyInstall()}
+                    class:copied-install={copiedInstall}>{copiedInstall ? "copied" : "copy"}</button
+                ></code>
+        </label>
+
+        <!-- <span style="display:flex;gap:inherit;margin-left:auto;"> -->
+        <label class="toggle">
+            <input type="checkbox" bind:checked={dark} style="display:none" />
+            <Symbol name={dark ? "light_mode" : "dark_mode"} fill />
+        </label>
+
+        <label class="toggle">
+            <input type="checkbox" bind:checked={titles} style="display:none" />
+            <Symbol name={titles ? "subtitles" : "subtitles_off"} />
+        </label>
+
+        <label class="toggle">
+            <a href="https://github.com/felbsn/svelte-material-symbols">
+                <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512"
+                    ><path
+                        d="M256,32C132.3,32,32,134.9,32,261.7c0,101.5,64.2,187.5,153.2,217.9a17.56,17.56,0,0,0,3.8.4c8.3,0,11.5-6.1,11.5-11.4,0-5.5-.2-19.9-.3-39.1a102.4,102.4,0,0,1-22.6,2.7c-43.1,0-52.9-33.5-52.9-33.5-10.2-26.5-24.9-33.6-24.9-33.6-19.5-13.7-.1-14.1,1.4-14.1h.1c22.5,2,34.3,23.8,34.3,23.8,11.2,19.6,26.2,25.1,39.6,25.1a63,63,0,0,0,25.6-6c2-14.8,7.8-24.9,14.2-30.7-49.7-5.8-102-25.5-102-113.5,0-25.1,8.7-45.6,23-61.6-2.3-5.8-10-29.2,2.2-60.8a18.64,18.64,0,0,1,5-.5c8.1,0,26.4,3.1,56.6,24.1a208.21,208.21,0,0,1,112.2,0c30.2-21,48.5-24.1,56.6-24.1a18.64,18.64,0,0,1,5,.5c12.2,31.6,4.5,55,2.2,60.8,14.3,16.1,23,36.6,23,61.6,0,88.2-52.4,107.6-102.3,113.3,8,7.1,15.2,21.1,15.2,42.5,0,30.7-.3,55.5-.3,63,0,5.4,3.1,11.5,11.4,11.5a19.35,19.35,0,0,0,4-.4C415.9,449.2,480,363.1,480,261.7,480,134.9,379.7,32,256,32Z" /></svg>
+            </a>
+        </label>
+        <!-- </span> -->
     </div>
 
     <div
@@ -241,6 +273,7 @@
         transition: all 180ms;
 
         color: #333;
+        fill: #333;
     }
 
     .top {
@@ -281,9 +314,56 @@
         user-select: none;
     }
 
-    a.toggle {
+    .copy-button {
+        background: unset;
+        border: none;
+        box-shadow: 0 0px 2px #0004;
+        color: whitesmoke;
+        background-color: rgba(30, 143, 255, 0.77);
+        border-radius: 3px;
+        cursor: pointer;
+    }
+    .copy-button:hover {
+        background-color: rgba(79, 165, 251, 0.692);
+    }
+
+    .init {
+        max-width: 0;
+        overflow: hidden;
+        transition: all 200ms;
+        white-space: nowrap;
+        font-size: 14px;
+
+        box-shadow: inset 0 3px 32px #0002;
+        border-radius: 3px;
+        padding: 0px;
+
+        transition-delay: 1000ms;
+    }
+    .toggle:hover .init {
+        max-width: 250px;
+        overflow: hidden;
+        padding: 4px;
+        transition-delay: 00ms;
+    }
+
+    code.init {
+        cursor: text;
+        user-select: text;
+        color: #777;
+    }
+
+    svg {
+        height: 28px;
+        width: 28px;
+    }
+
+    a {
         text-decoration: none;
-        color: inherit;
+        fill: inherit;
+    }
+    a:hover {
+        fill: dodgerblue;
     }
 
     .toggle select {
@@ -438,6 +518,7 @@
 
     .dark {
         color: whitesmoke;
+        fill: whitesmoke;
     }
     .dark.container {
         background: black;
