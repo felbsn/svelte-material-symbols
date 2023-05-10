@@ -341,7 +341,7 @@
         transition-delay: 1000ms;
     }
     .toggle:hover .init {
-        max-width: 280px;
+        max-width: 300px;
         overflow: hidden;
         padding: 4px;
         transition-delay: 00ms;
