@@ -1,6 +1,12 @@
 {
 	"name": "svelte-material-symbols",
 	"version": "0.0.1",
+	"author": {
+		"email": "felbsn@gmail.com",
+		"name": "felbsn",
+		"url": "https://github.com/felbsn/svelte-material-symbols"
+	},
+	"license": "MIT",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build && npm run package",
