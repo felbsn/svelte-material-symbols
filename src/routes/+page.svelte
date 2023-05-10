@@ -24,6 +24,7 @@
     let copied = "";
     let copiedOnlyName = false;
     let copiedInstall = false;
+    let copiedImport = false;
 
     /**
      * @type {{name:keyof codepoints, code:string,title:string}[]}
@@ -74,6 +75,12 @@
         startClearCopy();
     }
 
+    function copyImport() {
+        navigator.clipboard.writeText(`import { Symbol } from "@felbsn/svelte-material-symbols"`);
+        copiedImport = true;
+        startImportClearCopy();
+    }
+
     function copyInstall() {
         copiedInstall = true;
         navigator.clipboard.writeText(`npm i @felbsn/svelte-material-symbols`);
@@ -96,6 +103,15 @@
         clearInstallTimer = setTimeout(() => {
             copiedInstall = false;
             clearInstallTimer = 0;
+        }, 3_000);
+    }
+
+    let clearImportTimer = 0;
+    function startImportClearCopy() {
+        if (clearImportTimer) clearInterval(clearImportTimer);
+        clearImportTimer = setTimeout(() => {
+            copiedImport = false;
+            clearImportTimer = 0;
         }, 3_000);
     }
 
@@ -189,12 +205,21 @@
                     ><rect x="227.6" y="213.1" width="28.4" height="57.1" /><path
                         d="M0,156V327.4H142.2V356H256V327.4H512V156ZM142.2,298.9H113.8V213.2H85.3v85.7H28.4V184.6H142.2Zm142.2,0H227.5v28.6H170.6V184.6H284.4Zm199.2,0H455.2V213.2H426.8v85.7H398.4V213.2H370v85.7H313.1V184.6H483.8V298.9Z" /></svg>
             </a>
-            <code class="init"
-                >npm i @felbsn/svelte-material-symbols <button
-                    class="copy-button"
-                    on:click={() => copyInstall()}
-                    class:copied-install={copiedInstall}>{copiedInstall ? "copied" : "copy"}</button
-                ></code>
+            <div class="col" style="display:flex; flex-direction: column;">
+                <code class="init"
+                    >npm i @felbsn/svelte-material-symbols <button
+                        class="copy-button"
+                        on:click={() => copyInstall()}
+                        class:copied-install={copiedInstall}>{copiedInstall ? "copied" : "copy"}</button
+                    ></code>
+
+                <code class="init"
+                    >{`import { Symbol } from "@felbsn/svelte-material-symbols" `}<button
+                        class="copy-button"
+                        on:click={() => copyImport()}
+                        class:copied-install={copiedImport}>{copiedImport ? "copied" : "copy"}</button
+                    ></code>
+            </div>
         </label>
 
         <!-- <span style="display:flex;gap:inherit;margin-left:auto;"> -->
@@ -371,16 +396,20 @@
         transition-delay: 2000ms;
     }
     .toggle:hover .init {
-        max-width: 300px;
+        max-width: 450px;
         overflow: hidden;
         padding: 4px;
         transition-delay: 200ms;
     }
 
+    code {
+        background: #fff1;
+    }
     code.init {
         cursor: text;
         user-select: text;
         color: #777;
+        margin: 1px;
     }
 
     svg {
