@@ -4,6 +4,7 @@
     import codepoints from "../lib/codepoints.js";
     import { scale, slide } from "svelte/transition";
     import Fuse from "fuse.js";
+    import { onMount, tick } from "svelte";
 
     let search = "";
 
@@ -13,7 +14,7 @@
     let size = 32;
 
     let sizeSet = false;
-    let sliceSize = 200;
+    let sliceSize = 100;
     let sliceStart = 0;
 
     let titles = false;
@@ -39,7 +40,7 @@
     function onsearch(s) {
         s = s.trim();
         sliceStart = 0;
-        sliceSize = 200;
+        sliceSize = 100;
 
         const adaptedSearchTerm = s
             .split(" ")
@@ -100,28 +101,47 @@
 
     let pops = [];
     let index = 0;
-</script>
 
-<div
-    class="container"
-    class:dark
-    on:scroll={(ev) => {
-        // console.log(
-        //     `${ev.currentTarget.scrollTop} >= ${ev.currentTarget.scrollHeight - ev.currentTarget.offsetHeight}`
-        // );
+    /**
+     * @type {HTMLElement}
+     */
+    let container;
 
-        if (ev.currentTarget.scrollTop >= ev.currentTarget.scrollHeight - ev.currentTarget.offsetHeight) {
-            //alert("end of the road");
-            // sliceStart += 100;
-            sliceSize += 200;
-            pops.push([ev.currentTarget.scrollTop, sliceSize - 200]);
+    async function fillView() {
+        while (container.scrollTop >= container.scrollHeight - container.offsetHeight) {
+            sliceSize += 100;
+            pops.push([container.scrollTop, sliceSize - 100]);
+            await tick();
         }
 
         if (pops.length > 0) {
-            while (pops.length > 0 && ev.currentTarget.scrollTop + 20 < pops.at(-1)[0]) {
+            while (pops.length > 0 && container.scrollTop + 20 < pops.at(-1)[0]) {
                 sliceSize = pops.pop()[1];
             }
         }
+
+        // let diff = container.scrollHeight - container.offsetHeight;
+        // while (diff <= 0 && sliceSize < results.length) {
+        //     sliceSize += 200;
+        //     pops.push([container.scrollTop, sliceSize - 200]);
+        //     await tick();
+        //     diff = container.scrollHeight - container.offsetHeight;
+        // }
+    }
+
+    onMount(async () => {
+        await fillView();
+    });
+</script>
+
+<svelte:window on:resize={fillView} />
+
+<div
+    bind:this={container}
+    class="container"
+    class:dark
+    on:scroll={(ev) => {
+        fillView();
     }}>
     <div class="top">
         <input class="toggle" type="text" autofocus bind:value={search} placeholder="search..." />
@@ -453,18 +473,19 @@
         position: absolute;
         max-height: 0;
 
-        bottom: 3px;
+        bottom: -10px;
 
         font-size: 12px;
         /* overflow: hidden; */
         /* text-overflow: ellipsis; */
         /* max-width: 60px; */
         transition: all 180ms;
-        width: calc(100% + 20px);
+        width: calc(100%);
         text-align: center;
 
         overflow: hidden;
         text-overflow: ellipsis;
+        box-sizing: border-box;
     }
 
     .copied .name {
@@ -481,8 +502,10 @@
 
     .codepoint:hover .name {
         max-height: 20px;
-        font-size: 6px;
+        font-size: 5px;
         padding-bottom: 1px;
+        bottom: 4px;
+        padding-inline: 2px;
 
         /* max-width: 100%; */
     }
