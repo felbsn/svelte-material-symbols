@@ -1,1 +1,2 @@
-export * as Symbol from "./Symbol.svelte"
+import Symbol from "./Symbol.svelte"
+export { Symbol };
