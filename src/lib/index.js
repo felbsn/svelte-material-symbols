@@ -1,2 +1,2 @@
 import Symbol from "./Symbol.svelte"
-export { Symbol };
+export { Symbol, Symbol as MaterialSymbol };
