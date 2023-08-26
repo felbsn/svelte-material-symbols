@@ -275,7 +275,7 @@
 
                     {#if copied == codepoint.name}
                         <div class="copy-indicator">
-                            Copied {copiedOnlyName ? "name" : "item"}<Symbol name="inventory" />
+                            <Symbol name="content_copy" />{copiedOnlyName ? "name" : "component"} copied
                         </div>
                     {/if}
                 </div>
@@ -295,8 +295,8 @@
                     </div>
 
                     {#if copied == codepoint.name}
-                        <div class="copy-indicator">
-                            Copied {copiedOnlyName ? "name" : "item"}<Symbol name="inventory" />
+                        <div class="copy-indicator" style="font-size: {size / 5}px;">
+                            <Symbol name="content_copy" size="{size / 5}px" />{copiedOnlyName ? "name" : "component"} copied
                         </div>
                     {/if}
                 </div>
@@ -551,11 +551,12 @@
 
     @keyframes begin {
         0% {
-            max-width: 0;
+            /* max-width: 0; */
             max-height: 0;
         }
         100% {
-            max-width: 100%;
+            /* max-width: 100%;
+            max-height: 100%; */
             max-height: 100%;
         }
     }
@@ -565,17 +566,20 @@
         display: flex;
         align-items: center;
         gap: 3px;
-        font-size: 7px;
+        font-size: 12px;
         top: 2px;
         right: 2px;
         color: white;
         padding: 2px;
         border-radius: 6px;
         animation: begin 400ms forwards;
+
         background-color: rgba(128, 128, 128, 0.387);
         backdrop-filter: blur(12px);
         overflow: hidden;
-        white-space: nowrap;
+        width: calc(100% - 4px);
+        box-sizing: border-box;
+        /* white-space: nowrap; */
     }
 
     .dark {

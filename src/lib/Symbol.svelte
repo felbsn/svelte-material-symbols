@@ -9,9 +9,9 @@
     export let name;
 
     /**
-     * @type {string|undefined}
+     * @type {string}
      */
-    export let style = undefined;
+    export let style = "";
 
     /**
      * @type {keyof types}
