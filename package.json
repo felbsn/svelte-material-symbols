@@ -1,6 +1,6 @@
 {
 	"name": "@felbsn/svelte-material-symbols",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"author": {
 		"email": "felbsn@gmail.com",
 		"name": "felbsn",
@@ -35,7 +35,7 @@
 		"!dist/**/*.spec.*"
 	],
 	"peerDependencies": {
-		"svelte": "^4.20.0"
+		"svelte": "^4.0.0"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^2.1.0",
