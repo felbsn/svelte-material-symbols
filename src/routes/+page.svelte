@@ -1,5 +1,5 @@
 <script>
-    import Symbol from "$lib/Symbol.svelte";
+    import MaterialSymbol from "$lib/MaterialSymbol.svelte";
     import { flip } from "svelte/animate";
     import codepoints from "../lib/codepoints.js";
     import { scale, slide } from "svelte/transition";
@@ -165,7 +165,7 @@
         <label class="toggle">
             fill
             <input type="checkbox" bind:checked={fill} style="display:none" />
-            <Symbol name="water_drop" {fill} />
+            <MaterialSymbol name="water_drop" {fill} />
         </label>
 
         <label class="toggle">
@@ -182,7 +182,7 @@
                 type="color"
                 bind:value={color}
                 style="visibility: collapse;width:0;border:0;padding:0;margin:-2px;" />
-            <Symbol name="palette" {color} fill />
+            <MaterialSymbol name="palette" {color} fill />
         </label>
 
         <label class="toggle">
@@ -230,7 +230,7 @@
                 on:change={() => ($preferences.dark = dark)}
                 style="display:none" />
 
-            <Symbol name={dark ? "light_mode" : "dark_mode"} fill />
+            <MaterialSymbol name={dark ? "light_mode" : "dark_mode"} fill />
         </label>
 
         <label class="toggle">
@@ -240,7 +240,7 @@
                 on:change={() => ($preferences.titles = titles)}
                 style="display:none" />
 
-            <Symbol name={titles ? "subtitles" : "subtitles_off"} />
+            <MaterialSymbol name={titles ? "subtitles" : "subtitles_off"} />
         </label>
 
         <label class="toggle">
@@ -267,7 +267,7 @@
                     on:dblclick={() => copyOnlyName(codepoint)}
                     in:scale={{ duration: 200 }}
                     animate:flip={{ duration: 200 }}>
-                    <Symbol name={codepoint.name} {fill} {type} {color} size={size + "px"} />
+                    <MaterialSymbol name={codepoint.name} {fill} {type} {color} size={size + "px"} />
 
                     <div class="name" title={codepoint.name}>
                         {codepoint.name}
@@ -275,7 +275,7 @@
 
                     {#if copied == codepoint.name}
                         <div class="copy-indicator">
-                            <Symbol name="content_copy" />{copiedOnlyName ? "name" : "component"} copied
+                            <MaterialSymbol name="content_copy" />{copiedOnlyName ? "name" : "component"} copied
                         </div>
                     {/if}
                 </div>
@@ -288,7 +288,7 @@
                     class:copied={codepoint.name == copied}
                     on:click={() => copy(codepoint)}
                     on:dblclick={() => copyOnlyName(codepoint)}>
-                    <Symbol name={codepoint.name} {type} {fill} {color} size={size + "px"} />
+                    <MaterialSymbol name={codepoint.name} {type} {fill} {color} size={size + "px"} />
 
                     <div class="name" title={codepoint.name}>
                         {codepoint.name}
@@ -296,7 +296,9 @@
 
                     {#if copied == codepoint.name}
                         <div class="copy-indicator" style="font-size: {size / 5}px;">
-                            <Symbol name="content_copy" size="{size / 5}px" />{copiedOnlyName ? "name" : "component"} copied
+                            <MaterialSymbol name="content_copy" size="{size / 5}px" />{copiedOnlyName
+                                ? "name"
+                                : "component"} copied
                         </div>
                     {/if}
                 </div>
